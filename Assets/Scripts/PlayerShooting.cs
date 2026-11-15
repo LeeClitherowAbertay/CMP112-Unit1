@@ -1,10 +1,10 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 
 public class PlayerShooting : MonoBehaviour
 {
-    public float bullet_speed;
-    public GameObject bullet_pref;
+    public GameObject camera;
 
     void Start()
     {
@@ -15,12 +15,16 @@ public class PlayerShooting : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject bullet = Instantiate(bullet_pref);
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
-            bullet.transform.position = transform.position;
-            bullet.transform.rotation = transform.rotation;
-            rb.AddForce(transform.forward * bullet_speed, ForceMode.Impulse);
-            Destroy(bullet, 5);
+
+            RaycastHit hit;
+
+            if (Physics.Raycast(camera.transform.position, camera.transform.forward*100,out hit, Mathf.Infinity))
+            {
+                if (hit.transform.CompareTag("Plate"))
+                {
+                    hit.transform.gameObject.GetComponent<PlateSettup>()._damage(1,gameObject);
+                }
+            }
         }
     }
 }
