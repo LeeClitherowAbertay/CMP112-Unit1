@@ -9,16 +9,14 @@ public class cameraController : MonoBehaviour
     float yrotation;
 
     public GameObject player;
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
     {
         if (player.GetComponent<PlayerManager>().is_paused == false)
         {
+            //moves the cammera based on the snensx and sensy and the movement of the players mouse
+
             float mousex = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensex;
             float mousey = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensey;
 
