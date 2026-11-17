@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Launcher : MonoBehaviour
 {
@@ -17,23 +18,30 @@ public class Launcher : MonoBehaviour
     public float min_plate_speed;
     public float max_plate_speed;
 
+    public GameObject player;
+
+    private bool is_shooting = true;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (rotator == null || plate_pref == null)
+        if (rotator == null || plate_pref == null || player == null)
         {
             Destroy(gameObject);
         }
         rotator.transform.rotation = Quaternion.Euler(0, 0, min_rotation);
 
         float time = Random.Range(min_shoot_speed, max_shoot_speed);
-        Invoke("_shoot_plate", time);
+        Invoke("_stop_shooting", time);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (!is_shooting && !player.GetComponent<PlayerManager>().is_paused)
+        {
+            _shoot_plate();
+        }
     }
 
     private void FixedUpdate()
@@ -56,10 +64,14 @@ public class Launcher : MonoBehaviour
 
     private void _shoot_plate()
     {
-        Debug.Log("Shoot");
+
+        is_shooting = true;
         
         GameObject plate = Instantiate(plate_pref);
         Rigidbody plate_rb = plate.GetComponent<Rigidbody>();
+        PlateSettup plate_su = plate.GetComponent<PlateSettup>();
+
+        plate_su.player = player;
 
         plate.transform.position = transform.position;
 
@@ -69,7 +81,10 @@ public class Launcher : MonoBehaviour
         Destroy(plate, 10);
 
         float time = Random.Range(min_shoot_speed, max_shoot_speed);
-        Invoke("_shoot_plate", time);
+        Invoke("_stop_shooting", time);
     }
-
+    private void _stop_shooting()
+    {
+        is_shooting = false;
+    }
 }

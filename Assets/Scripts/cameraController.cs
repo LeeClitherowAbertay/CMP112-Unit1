@@ -7,24 +7,28 @@ public class cameraController : MonoBehaviour
 
     float xrotation;
     float yrotation;
+
+    public GameObject player;
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        float mousex = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensex;
-        float mousey = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensey;
+        if (player.GetComponent<PlayerManager>().is_paused == false)
+        {
+            float mousex = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensex;
+            float mousey = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensey;
 
-        yrotation += mousex;
-        xrotation -= mousey;
+            yrotation += mousex;
+            xrotation -= mousey;
 
-        xrotation = Mathf.Clamp(xrotation, -90.0f, 90.0f);
+            xrotation = Mathf.Clamp(xrotation, -90.0f, 90.0f);
 
-        transform.rotation = Quaternion.Euler(xrotation, yrotation, 0);
+            transform.rotation = Quaternion.Euler(xrotation, yrotation, 0);
+        }
 
     }
 }

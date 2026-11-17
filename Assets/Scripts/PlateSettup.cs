@@ -1,8 +1,5 @@
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class PlateSettup : MonoBehaviour
 {
@@ -10,6 +7,8 @@ public class PlateSettup : MonoBehaviour
 
     public int max_health = 1; 
     public int health = 1;
+
+    public GameObject player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +21,15 @@ public class PlateSettup : MonoBehaviour
         }
         health = max_health;
     }
+
+    private void Update()
+    {
+        if (player.GetComponent<PlayerManager>().is_paused)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public void _damage(int damage, GameObject player)
     {
         health -= damage;
@@ -29,6 +37,13 @@ public class PlateSettup : MonoBehaviour
         {
             Destroy(gameObject);
             player.GetComponent<PlayerManager>()._increase_score(1);
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground")){
+            player.GetComponent<PlayerManager>()._take_damage(1);
+            Destroy(gameObject);
         }
     }
 }

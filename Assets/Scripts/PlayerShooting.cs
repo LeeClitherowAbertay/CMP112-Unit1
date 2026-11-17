@@ -13,7 +13,7 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !gameObject.GetComponent<PlayerManager>().is_paused)
         {
 
             RaycastHit hit;
